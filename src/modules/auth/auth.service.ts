@@ -3,6 +3,8 @@ import { Ilogin, Iregister } from "./auth.interface";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcryptjs";
 import config from "../../config";
+import jwt, { SignOptions } from "jsonwebtoken"
+import { jwtUtilis } from "../../utils/jwt";
 
 const registerUserIntoDB = async (payload: Iregister) => {
   const { name, email, password,phone} = payload;
@@ -57,7 +59,29 @@ const loginUserIntoDb =async (payload:Ilogin)=>{
       }
 
       // token related 
-      
+
+
+      const jwtPayload = {
+      id:user.id,
+        email:user.email,
+        role:user.role
+
+      }
+
+      const accessToken = jwtUtilis.createToken(jwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expire_in as string
+      )
+
+      const refreshToken = jwtUtilis.createToken(jwtPayload,
+        config.jwt_refresh_secret as string,
+        config.jwt_refresh_expire_in as string
+      )
+
+      return {
+        accessToken,
+        refreshToken
+      }
 }
 
 export const authservice = {
