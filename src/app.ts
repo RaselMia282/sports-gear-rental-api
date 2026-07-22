@@ -2,7 +2,8 @@ import express, { Application, Request, Response } from "express";
 import config from "./config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { userRoutes } from "./modules/users/users.routes";
+import { authRoutes } from "./modules/auth/auth.routes";
+
 const app: Application = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -22,6 +23,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("sports-rental-gear-api");
 });
 
-app.post("/api/users",userRoutes)
+app.use("/api/auth",authRoutes)
 
 export default app;
