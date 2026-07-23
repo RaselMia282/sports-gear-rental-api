@@ -51,8 +51,23 @@ const loginUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=>
 
 })
 
+const getMyProfile = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+         const id = req.user?.id;
+         console.log("req user",req.user);
+         
+         const result = await authservice.getMyProfileIntoDB(id as string)
+         console.log("result from db",result);
+         
+         sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.OK,
+            message:"profile retvied successfully",
+            data:result
+         })
+})
 
 export const authController = {
     registerUser,
-    loginUser
+    loginUser,
+    getMyProfile
 }
