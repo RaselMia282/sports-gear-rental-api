@@ -28,12 +28,9 @@ const userRental = catchAsync(
     const id = req.user?.id;
     // console.log("Req User Data:", req.user);
 
-       
-
     const result = await rentalOrdersService.userRentalIntoDb(id as string);
 
     // console.log(result);
-    
 
     sendResponse(res, {
       success: true,
@@ -44,7 +41,29 @@ const userRental = catchAsync(
   },
 );
 
+const rentalOrderDetails = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if (!id) {
+      throw new Error("Rental Order ID is required");
+    }
+    const result = await rentalOrdersService.rentalOrderDetailsIntoDb(
+      id as string,
+      req.user?.id as string,
+      req.user?.role as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "retrieved  rental order details successfully",
+      data: result,
+    });
+  },
+);
+
 export const rentalOrdersController = {
   createRentalOrder,
   userRental,
+  rentalOrderDetails,
 };
