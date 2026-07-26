@@ -8,22 +8,25 @@ const createToken = (payload:JwtPayload,secret:string,expiresIn:string)=>{
     return token
 }
 
-const verifyToken = (token:string,secret:string)=>{
-    try {
-        const verifiedToken = jwt.verify(token,secret)
-        return{
-            success:true,
-            data:verifiedToken
-        }
-    } catch (error:any) {
+// const verifyToken = (token:string,secret:string)=>{
+//     try {
+//         const verifiedToken = jwt.verify(token,secret)
+//         return{
+//             success:true,
+//             data:verifiedToken
+//         }
+//     } catch (error:any) {
         
-        return{
-            success:false,
-            error:error.message
-        }
-    }
-}
+//         return{
+//             success:false,
+//             error:error.message
+//         }
+//     }
+// }
 
+const verifyToken = (token: string, secret: string) => {
+    return jwt.verify(token, secret) as JwtPayload;
+};
 export const jwtUtilis = {
     createToken,
     verifyToken

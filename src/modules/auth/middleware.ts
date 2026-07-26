@@ -42,6 +42,11 @@ export const auth = (...requiredRoles: Role[]) => {
     }
 
     const { id, email, role } = verifiedToken;
+
+    console.log("Token payload role:", role);
+    console.log("Required roles for this route:", requiredRoles);
+    console.log("Is role matched?:", requiredRoles.includes(role));
+
     if (requiredRoles.length > 0 && !requiredRoles.includes(role)) {
       throw new Error(
         "Forbidden.You don't have permissions to access this route",
@@ -50,7 +55,6 @@ export const auth = (...requiredRoles: Role[]) => {
 
     const user = await prisma.user.findUnique({
       where: {
-        id,
         email,
       },
     });

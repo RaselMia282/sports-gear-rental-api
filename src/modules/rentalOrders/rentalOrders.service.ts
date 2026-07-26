@@ -1,4 +1,4 @@
-import { GearItemScalarFieldEnum } from "../../../prisma/generated/prisma/internal/prismaNamespace";
+
 import { prisma } from "../../lib/prisma";
 import { TRentalPayload } from "./rentalOrders.interface";
 
@@ -89,6 +89,22 @@ const result = await prisma.$transaction(async(tx)=>{
 
 };
 
+
+const userRentalIntoDb = async(customerId:string)=>{
+         const order = await prisma.rentalOrder.findMany({
+          where:{
+            customerId
+          },
+          include:{
+            items:true,
+            
+          }
+         })
+
+         return order
+}
+
 export const rentalOrdersService = {
   createRentalOrderIntoDB,
+  userRentalIntoDb,
 };
