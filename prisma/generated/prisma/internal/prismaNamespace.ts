@@ -399,6 +399,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Categories: 'Categories',
   GearItem: 'GearItem',
+  RentalOrder: 'RentalOrder',
+  RentalOrderItems: 'RentalOrderItems',
   User: 'User'
 } as const
 
@@ -415,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categories" | "gearItem" | "user"
+    modelProps: "categories" | "gearItem" | "rentalOrder" | "rentalOrderItems" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -567,6 +569,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RentalOrder: {
+      payload: Prisma.$RentalOrderPayload<ExtArgs>
+      fields: Prisma.RentalOrderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RentalOrderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RentalOrderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>
+        }
+        findFirst: {
+          args: Prisma.RentalOrderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RentalOrderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>
+        }
+        findMany: {
+          args: Prisma.RentalOrderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>[]
+        }
+        create: {
+          args: Prisma.RentalOrderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>
+        }
+        createMany: {
+          args: Prisma.RentalOrderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RentalOrderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>[]
+        }
+        delete: {
+          args: Prisma.RentalOrderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>
+        }
+        update: {
+          args: Prisma.RentalOrderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>
+        }
+        deleteMany: {
+          args: Prisma.RentalOrderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RentalOrderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RentalOrderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>[]
+        }
+        upsert: {
+          args: Prisma.RentalOrderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderPayload>
+        }
+        aggregate: {
+          args: Prisma.RentalOrderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRentalOrder>
+        }
+        groupBy: {
+          args: Prisma.RentalOrderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RentalOrderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RentalOrderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RentalOrderCountAggregateOutputType> | number
+        }
+      }
+    }
+    RentalOrderItems: {
+      payload: Prisma.$RentalOrderItemsPayload<ExtArgs>
+      fields: Prisma.RentalOrderItemsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RentalOrderItemsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RentalOrderItemsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>
+        }
+        findFirst: {
+          args: Prisma.RentalOrderItemsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RentalOrderItemsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>
+        }
+        findMany: {
+          args: Prisma.RentalOrderItemsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>[]
+        }
+        create: {
+          args: Prisma.RentalOrderItemsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>
+        }
+        createMany: {
+          args: Prisma.RentalOrderItemsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RentalOrderItemsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>[]
+        }
+        delete: {
+          args: Prisma.RentalOrderItemsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>
+        }
+        update: {
+          args: Prisma.RentalOrderItemsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>
+        }
+        deleteMany: {
+          args: Prisma.RentalOrderItemsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RentalOrderItemsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RentalOrderItemsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>[]
+        }
+        upsert: {
+          args: Prisma.RentalOrderItemsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalOrderItemsPayload>
+        }
+        aggregate: {
+          args: Prisma.RentalOrderItemsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRentalOrderItems>
+        }
+        groupBy: {
+          args: Prisma.RentalOrderItemsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RentalOrderItemsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RentalOrderItemsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RentalOrderItemsCountAggregateOutputType> | number
+        }
+      }
+    }
     User: {
       payload: Prisma.$UserPayload<ExtArgs>
       fields: Prisma.UserFieldRefs
@@ -708,6 +858,33 @@ export const GearItemScalarFieldEnum = {
 export type GearItemScalarFieldEnum = (typeof GearItemScalarFieldEnum)[keyof typeof GearItemScalarFieldEnum]
 
 
+export const RentalOrderScalarFieldEnum = {
+  id: 'id',
+  totalPrice: 'totalPrice',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  customerId: 'customerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RentalOrderScalarFieldEnum = (typeof RentalOrderScalarFieldEnum)[keyof typeof RentalOrderScalarFieldEnum]
+
+
+export const RentalOrderItemsScalarFieldEnum = {
+  id: 'id',
+  quantity: 'quantity',
+  priceAtRental: 'priceAtRental',
+  orderId: 'orderId',
+  gearItemsId: 'gearItemsId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RentalOrderItemsScalarFieldEnum = (typeof RentalOrderItemsScalarFieldEnum)[keyof typeof RentalOrderItemsScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -784,6 +961,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RentalStatus'
+ */
+export type EnumRentalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RentalStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'RentalStatus[]'
+ */
+export type ListEnumRentalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RentalStatus[]'>
     
 
 
@@ -981,6 +1172,8 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   categories?: Prisma.CategoriesOmit
   gearItem?: Prisma.GearItemOmit
+  rentalOrder?: Prisma.RentalOrderOmit
+  rentalOrderItems?: Prisma.RentalOrderItemsOmit
   user?: Prisma.UserOmit
 }
 

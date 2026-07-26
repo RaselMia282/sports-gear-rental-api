@@ -8,3 +8,12 @@ enum Role {
     ACTIVE
     SUSPEND
   }
+
+  enum RentalStatus {
+       PENDING
+       APPROVED
+       CANCELLED
+       COMPLETED
+       RETURNED
+       PICKED_UP
+  }

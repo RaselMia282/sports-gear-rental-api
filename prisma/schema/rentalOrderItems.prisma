@@ -1,0 +1,14 @@
+model RentalOrderItems {
+    id String @id @default(uuid())
+    quantity Int
+    priceAtRental Int
+    orderId String
+    order RentalOrder @relation(fields: [orderId],references: [id], onDelete: Cascade)
+    gearItemsId String
+    gears GearItem @relation(fields: [gearItemsId],references: [id],onDelete: Cascade)
+    
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    
+}
+
