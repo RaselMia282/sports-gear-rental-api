@@ -53,7 +53,8 @@ export const PaymentMethod = {
   SSLCOMMERZ: 'SSLCOMMERZ',
   BKASH: 'BKASH',
   NAGAD: 'NAGAD',
-  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY'
+  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY',
+  STRIPE: 'STRIPE'
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]

@@ -51,8 +51,40 @@ const confirmPayment = catchAsync(
   },
 );
 
+const paymentHistory = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const customerId = req.user?.id;
+    const result = await paymentService.paymentHistoryIntoDB(
+      customerId as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Payment history retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+const singlePaymentDetails = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const result = await paymentService.confirmPaymentIntoDB(id as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Payment details retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 export const paymentsController = {
   createPayment,
   handleWebhook,
   confirmPayment,
+  paymentHistory,
+  singlePaymentDetails,
 };

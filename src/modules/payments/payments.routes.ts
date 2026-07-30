@@ -11,6 +11,8 @@ router.post(
 );
 
 router.post("/webhook", paymentsController.handleWebhook);
-router.post("/confirm",paymentsController.confirmPayment)
+router.post("/confirm",paymentsController.confirmPayment);
+router.get("/",paymentsController.paymentHistory)
+router.get("/:id",paymentsController.singlePaymentDetails)
 
 export const paymentsRoutes = router;

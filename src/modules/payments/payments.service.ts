@@ -70,6 +70,13 @@ const createPaymentIntoDB = async (userId: string, orderId: string) => {
       transactionId: session.id,
       paymentMethod: PaymentMethod.CREDIT_CARD,
       status: PaymentStatus.PENDING,
+
+      paymentData: {
+        checkoutUrl: session.url,
+        sessionId: session.id,
+        currency: session.currency || "usd",
+        paymentStatus: session.payment_status,
+      } as any,
     },
   });
 
@@ -104,6 +111,13 @@ const handleWebhookIntoDB = async (payload: Buffer, signature: string) => {
           data: {
             status: PaymentStatus.PAID,
             transactionId: session.payment_intent as string,
+
+            paymentData: {
+              checkoutUrl: session.url,
+              sessionId: session.id,
+              currency: session.currency || "usd",
+              paymentStatus: session.payment_status,
+            } as any,
           },
         });
       }
@@ -119,8 +133,38 @@ const confirmPaymentIntoDB = async (sessionId: string) => {
   }
 };
 
+const paymentHistoryIntoDB = async (customerId: string) => {
+  const result = await prisma.payment.findMany({
+    where: { customerId: customerId },
+    include: {
+      order: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return result;
+};
+
+const singlePaymentDetailsIntoDB = async(paymentId:string)=>{
+         const result = await prisma.payment.findUnique({
+          where:{id:paymentId},
+          include:{
+            order:true,
+            customer:true,
+          }
+         })
+         if(!result){
+          throw new Error("Payment details not found!");
+         }
+     return result 
+
+}
+
 export const paymentService = {
   createPaymentIntoDB,
   handleWebhookIntoDB,
   confirmPaymentIntoDB,
+  paymentHistoryIntoDB,
+  singlePaymentDetailsIntoDB,
 };
