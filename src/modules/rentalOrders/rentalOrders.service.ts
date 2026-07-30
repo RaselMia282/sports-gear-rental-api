@@ -13,6 +13,7 @@ const createRentalOrderIntoDB = async (
     where: {
       id: gearItemId,
     },
+    
   });
 
   if (!gear) {
@@ -45,6 +46,14 @@ const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60
         endDate: end,
         totalPrice,
       },
+      include:{
+        customer:{
+          omit:{
+            password:true,
+          }
+        }
+      }
+      
     });
 
     // create rental order items
@@ -55,6 +64,7 @@ const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60
         quantity,
         priceAtRental: gear.pricePerDay,
       },
+      
     });
 
     // update available quantity

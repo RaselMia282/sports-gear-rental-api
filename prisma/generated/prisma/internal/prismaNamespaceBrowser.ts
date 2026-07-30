@@ -56,6 +56,7 @@ export const ModelName = {
   Payment: 'Payment',
   RentalOrder: 'RentalOrder',
   RentalOrderItems: 'RentalOrderItems',
+  Review: 'Review',
   User: 'User'
 } as const
 
@@ -144,6 +145,20 @@ export const RentalOrderItemsScalarFieldEnum = {
 } as const
 
 export type RentalOrderItemsScalarFieldEnum = (typeof RentalOrderItemsScalarFieldEnum)[keyof typeof RentalOrderItemsScalarFieldEnum]
+
+
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  gearId: 'gearId',
+  rentalId: 'rentalId'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

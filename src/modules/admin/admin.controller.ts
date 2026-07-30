@@ -44,9 +44,21 @@ const getAllGear = catchAsync(
     });
   },
 );
+const getAllRentalOrders = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+              const result = await adminService.getAllRentalOrdersIntoDB();
+
+              sendResponse(res,{
+                success:true,
+                statusCode:httpStatus.OK,
+                message:"All rental oder retrieved successfully",
+                data:result
+              })
+              
+})
 
 export const adminController = {
   getAllUsers,
   updateStatus,
   getAllGear,
+  getAllRentalOrders,
 };

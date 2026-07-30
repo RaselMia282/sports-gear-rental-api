@@ -10,6 +10,7 @@ model RentalOrder {
     payment Payment?   
     createdAt  DateTime     @default(now())
     updatedAt  DateTime     @updatedAt
+    reviews Review?
 
     @@map("rental_orders")
 }

@@ -1,7 +1,7 @@
 import { prisma } from "../../lib/prisma";
 import { ICreateGear } from "./gear.interface";
 
-const createGearIntoDb = async (payload: ICreateGear) => {
+const createGearIntoDb = async (payload: ICreateGear,providerId:string) => {
   const {
     title,
     description,
@@ -10,7 +10,7 @@ const createGearIntoDb = async (payload: ICreateGear) => {
     stockQuantity,
     availableQuantity,
     categoryId,
-    providerId,
+    
   } = payload;
 
   const gear = await prisma.gearItem.create({
@@ -22,7 +22,8 @@ const createGearIntoDb = async (payload: ICreateGear) => {
       stockQuantity,
       availableQuantity,
       categoryId,
-      providerId,
+      providerId
+     
     },
     include: {
       category: true,

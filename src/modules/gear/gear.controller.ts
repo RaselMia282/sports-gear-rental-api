@@ -6,7 +6,12 @@ import httpStatus from "http-status";
 const createGear = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const result = await gearService.createGearIntoDb(payload);
+    const providerId = req.user?.id;
+    console.log(providerId);
+    
+    const result = await gearService.createGearIntoDb(payload,providerId as string);
+    
+    
 
      sendResponse(res, {
       success: true,

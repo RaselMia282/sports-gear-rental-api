@@ -16,6 +16,7 @@ import { providerRoutes } from "./modules/provider/provider.routes";
 import { paymentsRoutes } from "./modules/payments/payments.routes";
 
 import { adminRoutes } from "./modules/admin/admin.routes";
+import { reviewsRoutes } from "./modules/reviews/reviews.route";
 
 const app: Application = express();
 
@@ -46,4 +47,5 @@ app.use("/api/rentals", rentalOrdersRoutes);
 app.use("/api/provider/gear", providerRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/reviews",reviewsRoutes)
 export default app;

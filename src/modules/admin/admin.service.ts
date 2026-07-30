@@ -55,8 +55,22 @@ const getAllGearIntoDB = async()=>{
          return result
 }
 
+const getAllRentalOrdersIntoDB = async()=>{
+         const result = await prisma.rentalOrder.findMany({
+            orderBy:{
+                createdAt:"desc"
+            },
+            include:{
+                items:true,
+                
+            }
+         })
+         return result
+}
+
 export const adminService = {
   getAllUsersIntoDB,
   updateStatusIntoDB,
   getAllGearIntoDB,
+  getAllRentalOrdersIntoDB,
 };

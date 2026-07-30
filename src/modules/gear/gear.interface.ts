@@ -5,6 +5,6 @@ export type ICreateGear = {
   stockQuantity: number;
   pricePerDay: number;
   availableQuantity: number;
-  providerId: string;
+  
   categoryId: string;
 };
