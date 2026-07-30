@@ -107,15 +107,19 @@ const handleWebhookIntoDB = async (payload: Buffer, signature: string) => {
           },
         });
       }
-      break
+      break;
     }
   }
 };
-const confirmPaymentIntoDB = async()=>{
+const confirmPaymentIntoDB = async (sessionId: string) => {
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-}
+  if (session.payment_status !== "paid") {
+    throw new Error("Payment not completed");
+  }
+};
 
-export const paymentsService = {
+export const paymentService = {
   createPaymentIntoDB,
   handleWebhookIntoDB,
   confirmPaymentIntoDB,
