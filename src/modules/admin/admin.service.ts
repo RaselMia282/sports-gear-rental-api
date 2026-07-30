@@ -42,7 +42,21 @@ const updateStatusIntoDB = async(userId:string,status:string)=>{
   return result 
 }
 
+const getAllGearIntoDB = async()=>{
+         const result = await prisma.gearItem.findMany({
+            orderBy:{
+                createdAt:"desc"
+            },
+            include:{
+                category:true
+            }
+         })
+
+         return result
+}
+
 export const adminService = {
   getAllUsersIntoDB,
   updateStatusIntoDB,
+  getAllGearIntoDB,
 };
