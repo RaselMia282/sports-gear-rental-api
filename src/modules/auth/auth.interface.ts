@@ -1,8 +1,11 @@
+import { Role } from "../../../prisma/generated/prisma/enums"
+
 export type  Iregister={
     name:string,
     email:string,
     password:string,
-    phone:string
+    phone:string,
+    role?:Role
 }
 
 export type Ilogin={

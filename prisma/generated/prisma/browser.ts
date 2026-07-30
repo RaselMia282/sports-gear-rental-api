@@ -28,6 +28,11 @@ export type Categories = Prisma.CategoriesModel
  */
 export type GearItem = Prisma.GearItemModel
 /**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
  * Model RentalOrder
  * 
  */

@@ -6,7 +6,8 @@ model RentalOrder {
     endDate    DateTime
     customerId String 
     customer User @relation(fields: [customerId],references: [id])
-    items RentalOrderItems[]      
+    items RentalOrderItems[]   
+    payment Payment?   
     createdAt  DateTime     @default(now())
     updatedAt  DateTime     @updatedAt
 

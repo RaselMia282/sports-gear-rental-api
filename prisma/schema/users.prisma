@@ -10,6 +10,7 @@ model User {
     updatedAt DateTime @updatedAt
     gearitems GearItem []
     rentals RentalOrder[]
+    payments Payment[]
     
 
     @@map("users")

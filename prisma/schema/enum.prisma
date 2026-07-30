@@ -17,3 +17,21 @@ enum Role {
        RETURNED
        PICKED_UP
   }
+
+
+
+  enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  SSLCOMMERZ
+  BKASH
+  NAGAD
+  CASH_ON_DELIVERY
+  STRIPE
+}

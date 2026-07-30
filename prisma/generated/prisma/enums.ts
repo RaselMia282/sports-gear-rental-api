@@ -36,3 +36,24 @@ export const RentalStatus = {
 } as const
 
 export type RentalStatus = (typeof RentalStatus)[keyof typeof RentalStatus]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const PaymentMethod = {
+  CREDIT_CARD: 'CREDIT_CARD',
+  SSLCOMMERZ: 'SSLCOMMERZ',
+  BKASH: 'BKASH',
+  NAGAD: 'NAGAD',
+  CASH_ON_DELIVERY: 'CASH_ON_DELIVERY'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]

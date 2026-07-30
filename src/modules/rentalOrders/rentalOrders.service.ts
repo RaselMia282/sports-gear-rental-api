@@ -6,6 +6,8 @@ const createRentalOrderIntoDB = async (
   customerId: string,
 ) => {
   const { startDate, endDate, gearItemId, quantity } = payload;
+  console.log("Received Dates:", { startDate, endDate });
+  
 
   const gear = await prisma.gearItem.findUnique({
     where: {
@@ -25,9 +27,8 @@ const createRentalOrderIntoDB = async (
   // calculation rental days
   const start = new Date(startDate);
   const end = new Date(endDate);
-  const rentalDays =
-    Math.ceil(end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
-
+  
+const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
   if (rentalDays <= 0) {
     throw new Error("End date must be grater than start date");
   }

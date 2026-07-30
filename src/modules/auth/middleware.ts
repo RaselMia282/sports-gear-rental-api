@@ -37,6 +37,9 @@ export const auth = (...requiredRoles: Role[]) => {
       config.jwt_access_secret as string,
     ) as JwtPayload;
 
+    console.log("verifiedToken",verifiedToken);
+    
+
     if (!verifiedToken) {
       throw new Error("Invalid token");
     }

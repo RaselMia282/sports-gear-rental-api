@@ -8,9 +8,9 @@ const createGear = catchAsync(
     const payload = req.body;
     const result = await gearService.createGearIntoDb(payload);
 
-    sendResponse(res, {
+     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.CREATED,
+      statusCode: httpStatus.OK,
       message: "created gear successfully",
       data: result,
     });
