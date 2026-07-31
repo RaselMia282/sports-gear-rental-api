@@ -11,8 +11,8 @@ router.post(
 );
 
 router.post("/webhook", paymentsController.handleWebhook);
-router.post("/confirm",paymentsController.confirmPayment);
-router.get("/",paymentsController.paymentHistory)
-router.get("/:id",paymentsController.singlePaymentDetails)
+router.post("/confirm",auth(Role.ADMIN,Role.CUSTOMER,Role.PROVIDER),paymentsController.confirmPayment);
+router.get("/",auth(Role.ADMIN,Role.CUSTOMER,Role.PROVIDER),paymentsController.paymentHistory)
+router.get("/:id",auth(Role.ADMIN,Role.CUSTOMER,Role.PROVIDER),paymentsController.singlePaymentDetails)
 
 export const paymentsRoutes = router;

@@ -1,44 +1,55 @@
 import { prisma } from "../../lib/prisma";
 import { TRentalPayload } from "./rentalOrders.interface";
+import AppError from "../../errors/apperror";
 
 const createRentalOrderIntoDB = async (
   payload: TRentalPayload,
   customerId: string,
 ) => {
   const { startDate, endDate, gearItemId, quantity } = payload;
-  console.log("Received Dates:", { startDate, endDate });
-  
 
   const gear = await prisma.gearItem.findUnique({
     where: {
       id: gearItemId,
     },
-    
   });
 
   if (!gear) {
-    throw new Error("Gears not found");
+    throw new AppError(404, "Gear item not found!");
   }
 
-  // stock check
+  // Stock check
   if (gear.availableQuantity < quantity) {
-    throw new Error("Stock not available");
+    throw new AppError(
+      400,
+      `Requested quantity (${quantity}) exceeds available stock (${gear.availableQuantity})!`,
+    );
   }
 
-  // calculation rental days
+  // Calculate rental days
   const start = new Date(startDate);
   const end = new Date(endDate);
-  
-const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  if (rentalDays <= 0) {
-    throw new Error("End date must be grater than start date");
+  const today = new Date();
+
+  // Validate dates
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+    throw new AppError(400, "Invalid start or end date provided!");
   }
 
-  // calculate total price
+  const rentalDays = Math.ceil(
+    (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  if (rentalDays <= 0) {
+    throw new AppError(400, "End date must be greater than start date!");
+  }
+
+  // Calculate total price
   const totalPrice = rentalDays * gear.pricePerDay * quantity;
 
-  // create order
+  // Transaction for order creation & stock update
   const result = await prisma.$transaction(async (tx) => {
+    // 1. Create order
     const order = await tx.rentalOrder.create({
       data: {
         customerId,
@@ -46,17 +57,9 @@ const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60
         endDate: end,
         totalPrice,
       },
-      include:{
-        customer:{
-          omit:{
-            password:true,
-          }
-        }
-      }
-      
     });
 
-    // create rental order items
+    // 2. Create rental order items
     await tx.rentalOrderItems.create({
       data: {
         orderId: order.id,
@@ -64,10 +67,9 @@ const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60
         quantity,
         priceAtRental: gear.pricePerDay,
       },
-      
     });
 
-    // update available quantity
+    // 3. Update available quantity
     await tx.gearItem.update({
       where: {
         id: gear.id,
@@ -79,13 +81,20 @@ const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60
       },
     });
 
-    // return order
+    // 4. Return full order details
     const rentalOrder = await tx.rentalOrder.findUnique({
       where: {
         id: order.id,
       },
       include: {
-        customer: true,
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
         items: {
           include: {
             gears: true,
@@ -93,22 +102,32 @@ const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60
         },
       },
     });
+
     return rentalOrder;
   });
+
   return result;
 };
 
 const userRentalIntoDb = async (customerId: string) => {
-  const order = await prisma.rentalOrder.findMany({
+  const orders = await prisma.rentalOrder.findMany({
     where: {
       customerId,
     },
     include: {
-      items: true,
+      items: {
+        include: {
+          gears: true,
+        },
+      },
+      payment: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
-  return order;
+  return orders;
 };
 
 const rentalOrderDetailsIntoDb = async (
@@ -119,16 +138,30 @@ const rentalOrderDetailsIntoDb = async (
   const order = await prisma.rentalOrder.findUnique({
     where: { id: orderId },
     include: {
-      items: true,
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      items: {
+        include: {
+          gears: true,
+        },
+      },
+      payment: true,
     },
   });
 
   if (!order) {
-    throw new Error("Rental order not found");
+    throw new AppError(404, "Rental order not found!");
   }
 
-  if (role === "CUST0MER" && order.customerId !== userId) {
-    throw new Error("You are not authorized to view this order");
+  
+  if (role === "CUSTOMER" && order.customerId !== userId) {
+    throw new AppError(403, "You are not authorized to view this order!");
   }
 
   return order;

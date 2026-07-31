@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
+import AppError from "../../errors/apperror";
 
 const createPaymentIntoDB = async (userId: string, orderId: string) => {
   // 1. Find Order
@@ -21,7 +22,7 @@ const createPaymentIntoDB = async (userId: string, orderId: string) => {
   });
 
   if (!order) {
-    throw new Error("Order not found");
+    throw new AppError(404,"Order not found");
   }
 
   // 2. Authorization
@@ -129,7 +130,7 @@ const confirmPaymentIntoDB = async (sessionId: string) => {
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.payment_status !== "paid") {
-    throw new Error("Payment not completed");
+    throw new AppError(400,"Payment not completed");
   }
 };
 
@@ -155,7 +156,7 @@ const singlePaymentDetailsIntoDB = async(paymentId:string)=>{
           }
          })
          if(!result){
-          throw new Error("Payment details not found!");
+          throw new AppError(404,"Payment details not found!");
          }
      return result 
 

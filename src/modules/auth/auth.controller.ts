@@ -3,71 +3,71 @@ import { catchAsync } from "../../utils/catchAsync";
 import { authservice } from "./auth.service";
 import { sendResponse } from "../../utils/sendRespone";
 import httpStatus from "http-status";
- 
-const registerUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-   
+
+const registerUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const result = await authservice.registerUserIntoDB(payload)
+    const result = await authservice.registerUserIntoDB(payload);
 
-    sendResponse(res,{
-        success:true,
-        statusCode:httpStatus.CREATED,
-        message:"User registered successfully",
-        data:result
-    })
-})
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User registered successfully",
+      data: result,
+    });
+  },
+);
 
-const loginUser = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-       
-      const payload = req.body;
-      const {accessToken,refreshToken} = await authservice.loginUserIntoDb(payload);
+const loginUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const { accessToken, refreshToken } =
+      await authservice.loginUserIntoDb(payload);
 
     //   set cookies
-    res.cookie ("accessToken",accessToken,{
-        httpOnly:true,
-        secure:false,
-        sameSite:"none",
-        maxAge:1000*60*60*24
-    })
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
 
-    res.cookie("refreshToken",refreshToken,{
-        httpOnly:true,
-        secure:false,
-        sameSite:"none",
-        maxAge:1000*60*60*24*7
-    })
-     
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
 
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User login  successfully",
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  },
+);
 
-      sendResponse(res,{
-        success:true,
-        statusCode:httpStatus.CREATED,
-        message:"User login  successfully",
-        data:{
-            accessToken,
-            refreshToken
-        }
-    })
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.user?.id;
 
-})
+    const result = await authservice.getMyProfileIntoDB(id as string);
 
-const getMyProfile = catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-         const id = req.user?.id;
-         console.log("get my profile",req.user);
-         
-         const result = await authservice.getMyProfileIntoDB(id as string)
-         console.log("result from db",result);
-         
-         sendResponse(res,{
-            success:true,
-            statusCode:httpStatus.OK,
-            message:"profile retrieved successfully",
-            data:result
-         })
-})
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "profile retrieved successfully",
+      data: result,
+    });
+  },
+);
 
 export const authController = {
-    registerUser,
-    loginUser,
-    getMyProfile
-}
+  registerUser,
+  loginUser,
+  getMyProfile,
+};

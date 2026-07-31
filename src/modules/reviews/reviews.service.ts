@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-
+import AppError from "../../errors/apperror";
 const createReviewIntoDB = async ( userId: string,payload:any) => {
   const { gearItemId, rating, comment } = payload;
 
@@ -28,7 +28,7 @@ const createReviewIntoDB = async ( userId: string,payload:any) => {
   });
 
   if (!rental) {
-    throw new Error("You can review only after returning the gear");
+    throw new AppError(404,"You can review only after returning the gear");
   }
 
   // 3. Create review

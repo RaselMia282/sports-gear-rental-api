@@ -3,10 +3,11 @@ import { categoryController } from "./categories.controller";
 import { auth } from "../auth/middleware";
 import { Role } from "../../../prisma/generated/prisma/enums";
 
+
 const router = Router();
-router.post("/",categoryController.createCategory)
+router.post("/",auth(Role.ADMIN),categoryController.createCategory)
 router.get("/",categoryController.getAllCategory)
 router.get("/:id",categoryController.getSingleCategory)
-router.patch("/:id",categoryController.updateCategory)
+router.patch("/:id",auth(Role.ADMIN),categoryController.updateCategory)
 
 export const categoryRoutes = router

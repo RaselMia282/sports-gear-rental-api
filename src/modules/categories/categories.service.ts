@@ -1,8 +1,16 @@
+import AppError from "../../errors/apperror";
 import { prisma } from "../../lib/prisma";
 import { Icreatecategory } from "./categories.interface";
 
 const createCategoryIntoDB = async (payload: Icreatecategory) => {
   const { name, description } = payload;
+
+  const isCategoryExists = await prisma.categories.findFirst({
+    where: { name },
+  });
+  if (isCategoryExists) {
+    throw new AppError(400, "Category with this name already exists!");
+  }
 
   const category = await prisma.categories.create({
     data: {
@@ -31,7 +39,7 @@ const getSingleCategoryIntoDB = async (id: string) => {
     },
   });
   if (!singleCategory) {
-    throw new Error("Category not found");
+    throw new AppError(404,"Category not found");
   }
   return singleCategory;
 };
@@ -44,7 +52,7 @@ const updateCategoryIntoDB = async (id: any, payload: any) => {
   });
 
   if (!isCategoryExists) {
-    throw new Error("Category not found");
+    throw new AppError(404,"Category not found");
   }
 
   const updateCategory = await prisma.categories.update({

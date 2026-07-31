@@ -1,14 +1,14 @@
-
 import { Ilogin, Iregister } from "./auth.interface";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcryptjs";
 import config from "../../config";
-import jwt, { SignOptions } from "jsonwebtoken"
+
 import { jwtUtilis } from "../../utils/jwt";
+import AppError from "../../errors/apperror";
 
 const registerUserIntoDB = async (payload: Iregister) => {
-  const { name, email, password,phone,role} = payload;
-      
+  const { name, email, password, phone, role } = payload;
+
   const isUserExists = await prisma.user.findUnique({
     where: {
       email,
@@ -16,7 +16,7 @@ const registerUserIntoDB = async (payload: Iregister) => {
   });
 
   if (isUserExists) {
-    throw new Error("user already exists");
+    throw new AppError(400,"user already exists");
   }
   const hashedPassword = await bcrypt.hash(
     password,
@@ -29,76 +29,73 @@ const registerUserIntoDB = async (payload: Iregister) => {
       email,
       password: hashedPassword,
       phone,
-      role
+      role,
     },
-    omit:{
-      password:true,
-    }
+    omit: {
+      password: true,
+    },
   });
   return createdUser;
 };
 
-const loginUserIntoDb =async (payload:Ilogin)=>{
-      const {email,password} = payload;
+const loginUserIntoDb = async (payload: Ilogin) => {
+  const { email, password } = payload;
 
-      const user = await prisma.user.findUnique({
-        where:{
-          email
-        }
-      })
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
 
+  if (!user) {
+    throw new AppError(404,"please register first");
+  }
 
-      if(!user){
-       throw new Error("please register first")
-      }
+  // match password
 
-      // match password
+  const matchPassword = await bcrypt.compare(password, user.password);
 
-      const matchPassword = await bcrypt.compare(password,user.password);
+  if (!matchPassword) {
+    throw new AppError(401,"password is wrong.Please try again");
+  }
 
-      if(!matchPassword){
-      throw new Error("password is wrong.Please try again")
-      }
+  // token related
 
-      // token related 
+  const jwtPayload = {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  };
 
+  const accessToken = jwtUtilis.createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expire_in as string,
+  );
 
-      const jwtPayload = {
-      id:user.id,
-        email:user.email,
-        role:user.role
+  const refreshToken = jwtUtilis.createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expire_in as string,
+  );
 
-      }
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
 
-      const accessToken = jwtUtilis.createToken(jwtPayload,
-        config.jwt_access_secret as string,
-        config.jwt_access_expire_in as string
-      )
-
-      const refreshToken = jwtUtilis.createToken(jwtPayload,
-        config.jwt_refresh_secret as string,
-        config.jwt_refresh_expire_in as string
-      )
-
-      return {
-        accessToken,
-        refreshToken
-      }
-}
-
-const getMyProfileIntoDB =async(userId:string)=>{
-        const profile = await prisma.user.findFirstOrThrow({
-          where:{
-            id :userId
-          },
-          omit:{
-            password:true,
-          }
-        })
-        return profile
-
-
-}
+const getMyProfileIntoDB = async (userId: string) => {
+  const profile = await prisma.user.findFirstOrThrow({
+    where: {
+      id: userId,
+    },
+    omit: {
+      password: true,
+    },
+  });
+  return profile;
+};
 
 export const authservice = {
   registerUserIntoDB,

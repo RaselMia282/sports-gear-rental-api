@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma";
 import { ICreateGearPayload, TUpdateRentalStatus } from "./provider.interface";
+import AppError from "../../errors/apperror";
 
 const providerGearIntoDB = async (
   payload: ICreateGearPayload,
@@ -19,16 +20,35 @@ const providerGearIntoDB = async (
 };
 
 const getProviderOrdersIntoDB = async (providerId: string) => {
+  
   const result = await prisma.rentalOrder.findMany({
     where: {
-      id: providerId,
+      items: {
+        some: {
+          gears: {
+            providerId: providerId,
+          },
+        },
+      },
     },
     include: {
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
       items: {
         include: {
           gears: true,
         },
       },
+      payment: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
@@ -38,19 +58,21 @@ const getProviderOrdersIntoDB = async (providerId: string) => {
 const updateGearIntoDB = async (
   gearId: string,
   providerId: string,
-  payload: ICreateGearPayload,
+  payload: Partial<ICreateGearPayload>,
 ) => {
   const isGearExists = await prisma.gearItem.findFirst({
     where: {
-      providerId,
       id: gearId,
     },
   });
 
   if (!isGearExists) {
-    throw new Error(
-      "Gear item not found or you are not authorized to update it!",
-    );
+    throw new AppError(404, "Gear item not found!");
+  }
+
+  
+  if (isGearExists.providerId !== providerId) {
+    throw new AppError(403, "You are not authorized to update this gear!");
   }
 
   const result = await prisma.gearItem.update({
@@ -87,9 +109,15 @@ export const updateOrderStatusIntoDB = async (
   });
 
   if (!isOrderExists) {
-    throw new Error(
+    throw new AppError(
+      404,
       "Rental order not found or you are not authorized to update it!",
     );
+  }
+
+  
+  if (isOrderExists.status === payload.status) {
+    throw new AppError(400, `Order status is already set to ${payload.status}!`);
   }
 
   const result = await prisma.rentalOrder.update({
@@ -100,54 +128,58 @@ export const updateOrderStatusIntoDB = async (
       status: payload.status,
     },
   });
-  if (isOrderExists.status === payload.status) {
-    throw new Error("Order is already in this status.");
-  }
 
   return result;
 };
 
-const deleteProviderGearIntoDB= async(gearId:string,providerId:string)=>{
-      const isGearExists = await prisma.gearItem.findUnique({
+const deleteProviderGearIntoDB = async (
+  gearId: string,
+  providerId: string,
+) => {
+  const isGearExists = await prisma.gearItem.findUnique({
     where: { id: gearId },
   });
+
   if (!isGearExists) {
-    throw new Error( "Gear not found!");
-  }
-  if (isGearExists.providerId !== providerId) {
-    throw new Error( "You are not authorized to delete this gear!");
+    throw new AppError(404, "Gear item not found!");
   }
 
+  if (isGearExists.providerId !== providerId) {
+    throw new AppError(403, "You are not authorized to delete this gear!");
+  }
+
+  
   const activeRental = await prisma.rentalOrder.findFirst({
-  where: {
-    status: {
-      in: ["PENDING", "APPROVED"], 
-    },
-    items: {
-      some: {
-        gearItemsId: gearId, 
+    where: {
+      status: {
+        in: ["PENDING", "APPROVED"],
+      },
+      items: {
+        some: {
+          gearItemsId: gearId,
+        },
       },
     },
-  },
-});
+  });
 
   if (activeRental) {
-    throw new Error(
-      
-      "Cannot delete gear with ongoing or pending rental orders!"
+    throw new AppError(
+      400,
+      "Cannot delete gear with ongoing or pending rental orders!",
     );
   }
+
   const result = await prisma.gearItem.delete({
     where: { id: gearId },
   });
 
-  return result
-}
+  return result;
+};
 
 export const providerService = {
   providerGearIntoDB,
   getProviderOrdersIntoDB,
   updateGearIntoDB,
   updateOrderStatusIntoDB,
-  deleteProviderGearIntoDB
+  deleteProviderGearIntoDB,
 };
