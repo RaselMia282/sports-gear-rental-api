@@ -4,15 +4,12 @@ import { providerService } from "./provider.service";
 import { sendResponse } from "../../utils/sendRespone";
 import httpStatus from "http-status";
 
-
-
 const providerGear = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const gearData = req.body;
 
     const providerId = req.user?.id;
     console.log(providerId);
-    
 
     const result = await providerService.providerGearIntoDB(
       gearData,
@@ -30,8 +27,7 @@ const providerGear = catchAsync(
 
 const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user?.id;
-  console.log("provider id",providerId);
-  
+  console.log("provider id", providerId);
 
   const result = await providerService.getProviderOrdersIntoDB(
     providerId as string,
@@ -69,13 +65,13 @@ const updateGear = catchAsync(
 const updateOrderStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const providerId = req.user?.id;
-    const { orderId:id } = req.params;
+    const { orderId: id } = req.params;
     const payload = req.body;
 
-    const result =await providerService.updateOrderStatusIntoDB(
+    const result = await providerService.updateOrderStatusIntoDB(
       providerId as string,
       id as string,
-      payload ,
+      payload,
     );
 
     sendResponse(res, {
@@ -87,9 +83,24 @@ const updateOrderStatus = catchAsync(
   },
 );
 
+const deleteProviderGear = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const user = req.user?.id
+    const result = await providerService.deleteProviderGearIntoDB(id as string,user as string)
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Gear removed from inventory successfully",
+      data: result,
+    });
+  },
+);
+
 export const providerController = {
   providerGear,
   getProviderOrders,
   updateGear,
   updateOrderStatus,
+  deleteProviderGear,
 };

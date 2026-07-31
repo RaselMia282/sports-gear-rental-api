@@ -107,9 +107,47 @@ export const updateOrderStatusIntoDB = async (
   return result;
 };
 
+const deleteProviderGearIntoDB= async(gearId:string,providerId:string)=>{
+      const isGearExists = await prisma.gearItem.findUnique({
+    where: { id: gearId },
+  });
+  if (!isGearExists) {
+    throw new Error( "Gear not found!");
+  }
+  if (isGearExists.providerId !== providerId) {
+    throw new Error( "You are not authorized to delete this gear!");
+  }
+
+  const activeRental = await prisma.rentalOrder.findFirst({
+  where: {
+    status: {
+      in: ["PENDING", "APPROVED"], 
+    },
+    items: {
+      some: {
+        gearItemsId: gearId, 
+      },
+    },
+  },
+});
+
+  if (activeRental) {
+    throw new Error(
+      
+      "Cannot delete gear with ongoing or pending rental orders!"
+    );
+  }
+  const result = await prisma.gearItem.delete({
+    where: { id: gearId },
+  });
+
+  return result
+}
+
 export const providerService = {
   providerGearIntoDB,
   getProviderOrdersIntoDB,
   updateGearIntoDB,
   updateOrderStatusIntoDB,
+  deleteProviderGearIntoDB
 };

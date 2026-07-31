@@ -1,10 +1,4 @@
-import express, {
-  Application,
-  request,
-  Request,
-  response,
-  Response,
-} from "express";
+import express, { Application, Request, Response } from "express";
 import config from "./config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -17,6 +11,8 @@ import { paymentsRoutes } from "./modules/payments/payments.routes";
 
 import { adminRoutes } from "./modules/admin/admin.routes";
 import { reviewsRoutes } from "./modules/reviews/reviews.route";
+import globalErrorHandler from "./modules/auth/globalErrorHandler";
+import notFound from "./modules/auth/notFound";
 
 const app: Application = express();
 
@@ -47,5 +43,8 @@ app.use("/api/rentals", rentalOrdersRoutes);
 app.use("/api/provider/gear", providerRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/reviews",reviewsRoutes)
+app.use("/api/reviews", reviewsRoutes);
+
+app.use(globalErrorHandler)
+app.use(notFound)
 export default app;
