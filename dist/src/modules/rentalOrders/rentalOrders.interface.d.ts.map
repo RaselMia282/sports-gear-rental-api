@@ -1,1 +1,0 @@
-{"version":3,"file":"rentalOrders.interface.d.ts","sourceRoot":"","sources":["../../../../src/modules/rentalOrders/rentalOrders.interface.ts"],"names":[],"mappings":"AACA,MAAM,WAAW,cAAc;IAC7B,UAAU,EAAE,MAAM,CAAC;IACnB,QAAQ,EAAE,MAAM,CAAC;IACjB,SAAS,EAAE,IAAI,CAAC;IAChB,OAAO,EAAE,IAAI,CAAC;CACf"}
