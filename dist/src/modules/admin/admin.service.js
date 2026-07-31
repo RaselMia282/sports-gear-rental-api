@@ -1,0 +1,66 @@
+import { prisma } from "../../lib/prisma";
+const getAllUsersIntoDB = async () => {
+    const result = await prisma.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            createdAt: true,
+        },
+    });
+    return result;
+};
+const updateStatusIntoDB = async (userId, status) => {
+    const isUserExist = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+    if (!isUserExist) {
+        throw new Error("User not found!");
+    }
+    const result = await prisma.user.update({
+        where: { id: userId },
+        data: {
+            status: status
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            updatedAt: true,
+        }
+    });
+    return result;
+};
+const getAllGearIntoDB = async () => {
+    const result = await prisma.gearItem.findMany({
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            category: true
+        }
+    });
+    return result;
+};
+const getAllRentalOrdersIntoDB = async () => {
+    const result = await prisma.rentalOrder.findMany({
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            items: true,
+        }
+    });
+    return result;
+};
+export const adminService = {
+    getAllUsersIntoDB,
+    updateStatusIntoDB,
+    getAllGearIntoDB,
+    getAllRentalOrdersIntoDB,
+};
+//# sourceMappingURL=admin.service.js.map

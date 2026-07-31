@@ -1,6 +1,7 @@
-import { prisma } from "../../lib/prisma";
-import { ICreateGearPayload, TUpdateRentalStatus } from "./provider.interface";
-import AppError from "../../errors/apperror";
+
+import AppError from "../../errors/apperror.js";
+import { prisma } from "../../lib/prisma.js";
+import { ICreateGearPayload, TUpdateRentalStatus } from "./provider.interface.js";
 
 const providerGearIntoDB = async (
   payload: ICreateGearPayload,

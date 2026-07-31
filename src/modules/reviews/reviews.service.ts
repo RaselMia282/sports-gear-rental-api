@@ -1,5 +1,6 @@
-import { prisma } from "../../lib/prisma";
-import AppError from "../../errors/apperror";
+
+import AppError from "../../errors/apperror.js";
+import { prisma } from "../../lib/prisma.js";
 const createReviewIntoDB = async ( userId: string,payload:any) => {
   const { gearItemId, rating, comment } = payload;
 

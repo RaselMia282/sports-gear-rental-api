@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { gearController } from "./gear.controller";
 import { auth } from "../auth/middleware";
-import { Role } from "../../../prisma/generated/prisma/enums";
+import { Role } from "../../generated/prisma/enums";
 
 const router=Router();
 router.post("/",auth(Role.CUSTOMER,Role.PROVIDER,Role.ADMIN),gearController.createGear)

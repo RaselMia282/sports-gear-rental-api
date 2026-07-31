@@ -1,18 +1,18 @@
 import express, { Application, Request, Response } from "express";
-import config from "./config";
+import config from "./config/index.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { authRoutes } from "./modules/auth/auth.routes";
-import { categoryRoutes } from "./modules/categories/categories.routes";
-import { gearRoutes } from "./modules/gear/gear.routes";
-import { rentalOrdersRoutes } from "./modules/rentalOrders/rentalOrders.routes";
-import { providerRoutes } from "./modules/provider/provider.routes";
-import { paymentsRoutes } from "./modules/payments/payments.routes";
+import { authRoutes } from "./modules/auth/auth.routes.js";
+import { categoryRoutes } from "./modules/categories/categories.routes.js";
+import { gearRoutes } from "./modules/gear/gear.routes.js";
+import { rentalOrdersRoutes } from "./modules/rentalOrders/rentalOrders.routes.js";
+import { providerRoutes } from "./modules/provider/provider.routes.js";
+import { paymentsRoutes } from "./modules/payments/payments.routes.js";
 
-import { adminRoutes } from "./modules/admin/admin.routes";
-import { reviewsRoutes } from "./modules/reviews/reviews.route";
-import globalErrorHandler from "./modules/auth/globalErrorHandler";
-import notFound from "./modules/auth/notFound";
+import { adminRoutes } from "./modules/admin/admin.routes.js";
+import { reviewsRoutes } from "./modules/reviews/reviews.route.js";
+import globalErrorHandler from "./modules/auth/globalErrorHandler.js";
+import notFound from "./modules/auth/notFound.js";
 
 const app: Application = express();
 

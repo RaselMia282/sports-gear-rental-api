@@ -1,4 +1,5 @@
-import { RentalStatus } from "../../../prisma/generated/prisma/enums";
+import { RentalStatus } from "../../generated/prisma/enums";
+
 
 export interface ICreateGearPayload {
   title: string;

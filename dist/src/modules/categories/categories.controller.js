@@ -1,0 +1,61 @@
+import { catchAsync } from "../../utils/catchAsync";
+import { categoryService } from "./categories.service";
+import { sendResponse } from "../../utils/sendRespone";
+import httpStatus from "http-status";
+const createCategory = catchAsync(async (req, res, next) => {
+    const { name, description } = req.body;
+    if (!name || !description) {
+        return res.status(400).json({
+            success: false,
+            message: "Name and description are required",
+        });
+    }
+    const result = await categoryService.createCategoryIntoDB({
+        name,
+        description,
+    });
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "create category successfully",
+        data: result,
+    });
+});
+const getAllCategory = catchAsync(async (req, res, next) => {
+    const result = await categoryService.getAllCategoryIntoDB();
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: " Category retrieved successfully",
+        data: result,
+    });
+});
+const getSingleCategory = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    //  console.log(id);
+    const result = await categoryService.getSingleCategoryIntoDB(id);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Category details retrieved successfully",
+        data: result,
+    });
+});
+const updateCategory = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const payload = req.body;
+    const result = await categoryService.updateCategoryIntoDB(id, payload);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Category updated successfully",
+        data: result,
+    });
+});
+export const categoryController = {
+    createCategory,
+    getAllCategory,
+    getSingleCategory,
+    updateCategory,
+};
+//# sourceMappingURL=categories.controller.js.map

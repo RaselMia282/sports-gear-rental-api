@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { providerController } from "./provider.controller";
-import { auth } from "../auth/middleware";
-import { Role } from "../../../prisma/generated/prisma/enums";
+import { auth } from "../auth/middleware.js";
+
+import { providerController } from "./provider.controller.js";
+import { Role } from "../../generated/prisma/enums";
 
 const router = Router ();
 router.post("/",auth(Role.PROVIDER),providerController.providerGear)

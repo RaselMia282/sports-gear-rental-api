@@ -1,6 +1,6 @@
-import { prisma } from "../../lib/prisma";
-import { TRentalPayload } from "./rentalOrders.interface";
-import AppError from "../../errors/apperror";
+import AppError from "../../errors/apperror.js";
+import { prisma } from "../../lib/prisma.js";
+import { TRentalPayload } from "./rentalOrders.interface.js";
 
 const createRentalOrderIntoDB = async (
   payload: TRentalPayload,
@@ -159,7 +159,6 @@ const rentalOrderDetailsIntoDb = async (
     throw new AppError(404, "Rental order not found!");
   }
 
-  
   if (role === "CUSTOMER" && order.customerId !== userId) {
     throw new AppError(403, "You are not authorized to view this order!");
   }

@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { catchAsync } from "../../utils/catchAsync";
-import { providerService } from "./provider.service";
-import { sendResponse } from "../../utils/sendRespone";
+import { catchAsync } from "../../utils/catchAsync.js";
+
 import httpStatus from "http-status";
+import { providerService } from "./provider.service.js";
+import { sendResponse } from "../../utils/sendRespone.js";
 
 const providerGear = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

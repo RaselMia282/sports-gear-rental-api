@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from 'express';
-import AppError from '../../errors/apperror';
+import AppError from '../../errors/apperror.js';
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong!';

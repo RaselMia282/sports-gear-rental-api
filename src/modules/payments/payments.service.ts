@@ -1,13 +1,10 @@
-import {
-  PaymentMethod,
-  PaymentStatus,
-  RentalStatus,
-} from "../../../prisma/generated/prisma/enums";
+
 import Stripe from "stripe";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
 import AppError from "../../errors/apperror";
+import { PaymentMethod, PaymentStatus, RentalStatus } from "../../generated/prisma/enums";
 
 const createPaymentIntoDB = async (userId: string, orderId: string) => {
   // 1. Find Order
